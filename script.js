@@ -8,6 +8,10 @@ form.onsubmit = (e) => {
 
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "message.php?t=" + Date.now(), true);
+
+  // Set a timeout for the AJAX request (e.g., 5000 milliseconds or 5 seconds)
+  xhr.timeout = 5000;
+
   xhr.onload = () => {
     if (xhr.readyState == 4 && xhr.status == 200) {
       let response = xhr.response;
@@ -26,6 +30,15 @@ form.onsubmit = (e) => {
       }
       statusTxt.innerText = response;
     }
+  };
+
+  // Handle the timeout event
+  xhr.ontimeout = () => {
+    statusTxt.style.color = "red";
+    statusTxt.innerText = "The request timed out. Please try again.";
+    setTimeout(() => {
+      statusTxt.style.display = "none";
+    }, 3000);
   };
 
   let formData = new FormData(form);
